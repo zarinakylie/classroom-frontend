@@ -1,6 +1,6 @@
 export const DEPARTMENTS = [
-    'CS',
-    'Math',
+    'Computer Science',
+    'Mathematics',
     'English',
 ];
 
