@@ -22,7 +22,7 @@ const SubjectListPage = () => {
         () => [
             {
                 id: "code",
-                accessorKey: "courseCode",
+                accessorKey: "code",
                 size: 100,
                 header: () => <p className="column-title ml-2">Code</p>,
                 cell: ({ getValue }) => <Badge>{getValue<string>()}</Badge>,
