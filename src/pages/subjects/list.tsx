@@ -39,12 +39,22 @@ const SubjectListPage = () => {
             },
             {
                 id: "department",
-                accessorKey: "department.name",
+                accessorKey: "department",
                 size: 150,
                 header: () => <p className="column-title">Department</p>,
-                cell: ({ getValue }) => (
-                    <Badge variant="secondary">{getValue<string>()}</Badge>
-                ),
+                cell: ({ getValue }) => {
+                    const department = getValue<unknown>();
+                    const departmentName =
+                        typeof department === "string"
+                            ? department
+                            : department &&
+                                typeof department === "object" &&
+                                "name" in department
+                              ? String(department.name ?? "")
+                              : "";
+
+                    return <Badge variant="secondary">{departmentName}</Badge>;
+                },
             },
             {
                 id: "description",
