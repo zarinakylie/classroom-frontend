@@ -7,7 +7,6 @@ export type Subject = {
   createdAt?: string;
 };
 
-
 export type ListResponse<T = unknown> = {
   data?: T[];
   pagination?: {
