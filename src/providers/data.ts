@@ -41,7 +41,9 @@ const normalizeSubject = (subject: unknown) => {
 
   return {
     ...record,
-    code: getDisplayText(record.code, ["code", "name", "id"]),
+    code:
+      getDisplayText(record.code, ["code", "name", "id"]) ||
+      getDisplayText(record.courseCode, ["courseCode", "code", "name", "id"]),
     name: getDisplayText(record.name, ["name", "code", "id"]),
     description: getDisplayText(record.description, [
       "description",

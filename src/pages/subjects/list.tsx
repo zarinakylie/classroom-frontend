@@ -74,7 +74,7 @@ const SubjectListPage = () => {
         size: 100,
         header: () => <p className="column-title ml-2">Code</p>,
         cell: ({ getValue }) => (
-          <Badge>{getDisplayText(getValue(), ["code", "name", "id"])}</Badge>
+          <Badge>{getDisplayText(getValue(), ["code", "courseCode", "name", "id"])}</Badge>
         ),
       },
       {

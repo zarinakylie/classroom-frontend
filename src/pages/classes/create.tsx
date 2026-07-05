@@ -24,12 +24,13 @@ import { CreateView } from "@/components/refine-ui/views/create-view";
 import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
 
 import { Textarea } from "@/components/ui/textarea";
-import { useBack, useList } from "@refinedev/core";
+import { useBack } from "@refinedev/core";
 import { Loader2 } from "lucide-react";
 import { classSchema } from "@/lib/schema";
 import UploadWidget from "@/components/upload-widgets";
-import { Subject, User } from "@/types";
+import { UploadWidgetValue } from "@/types";
 import z from "zod";
+import { SUBJECTS, TEACHERS } from "@/constants";
 
 const ClassesCreate = () => {
   const back = useBack();
@@ -62,34 +63,11 @@ const ClassesCreate = () => {
     }
   };
 
-  // Fetch subjects list
-  const { query: subjectsQuery } = useList<Subject>({
-    resource: "subjects",
-    pagination: {
-      pageSize: 100,
-    },
-  });
+  const teachers = TEACHERS;
+  const teachersLoading = false;
 
-  // Fetch teachers list
-  const { query: teachersQuery } = useList<User>({
-    resource: "users",
-    filters: [
-      {
-        field: "role",
-        operator: "eq",
-        value: "teacher",
-      },
-    ],
-    pagination: {
-      pageSize: 100,
-    },
-  });
-
-  const teachers = teachersQuery.data?.data || [];
-  const teachersLoading = teachersQuery.isLoading;
-
-  const subjects = subjectsQuery.data?.data || [];
-  const subjectsLoading = subjectsQuery.isLoading;
+  const subjects = SUBJECTS;
+  const subjectsLoading = false;
 
   return (
     <CreateView className="class-view">
@@ -134,7 +112,7 @@ const ClassesCreate = () => {
                                 }
                               : null
                           }
-                          onChange={(file) => {
+                          onChange={(file: UploadWidgetValue | null) => {
                             if (file) {
                               field.onChange(file.url);
                               form.setValue("bannerCldPubId", file.publicId, {
