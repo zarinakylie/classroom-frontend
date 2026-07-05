@@ -16,6 +16,36 @@ import {
 import { Home } from "lucide-react";
 import { Fragment, useMemo } from "react";
 
+const getBreadcrumbLabel = (label: unknown) => {
+  if (label == null) return "";
+
+  if (
+    typeof label === "string" ||
+    typeof label === "number" ||
+    typeof label === "boolean"
+  ) {
+    return String(label);
+  }
+
+  if (typeof label === "object") {
+    const record = label as Record<string, unknown>;
+
+    for (const key of ["name", "code", "title", "description", "id"]) {
+      const value = record[key];
+
+      if (
+        typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+      ) {
+        return String(value);
+      }
+    }
+  }
+
+  return "";
+};
+
 export function Breadcrumb() {
   const Link = useLink();
   const { breadcrumbs } = useBreadcrumb();
@@ -42,10 +72,16 @@ export function Breadcrumb() {
     });
 
     for (const { label, href } of breadcrumbs) {
+      const displayLabel = getBreadcrumbLabel(label);
+
       list.push({
-        key: `breadcrumb-item-${label}`,
+        key: `breadcrumb-item-${displayLabel}`,
         href: href ?? "",
-        Component: href ? <Link to={href}>{label}</Link> : <span>{label}</span>,
+        Component: href ? (
+          <Link to={href}>{displayLabel}</Link>
+        ) : (
+          <span>{displayLabel}</span>
+        ),
       });
     }
 

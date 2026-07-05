@@ -1,7 +1,8 @@
 export type Subject = {
-  id: number;
+  id: number | string;
   name: string;
   code: string;
+  courseCode?: string;
   description: string;
   department: string;
   createdAt?: string;

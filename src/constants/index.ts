@@ -47,6 +47,30 @@ export const DEPARTMENT_OPTIONS = DEPARTMENTS.map((dept) => ({
   label: dept,
 }));
 
+export const TEACHERS = [
+  {
+    id: "1",
+    name: "John Doe",
+  },
+  {
+    id: "2",
+    name: "Jane Smith",
+  },
+];
+
+export const SUBJECTS = [
+  {
+    id: 1,
+    name: "Mathematics",
+    code: "Mathematics",
+  },
+  {
+    id: 2,
+    name: "Science",
+    code: "Science",
+  },
+];
+
 export const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB in bytes
 export const ALLOWED_TYPES = [
   "image/png",

@@ -1,40 +1,63 @@
 import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
 
-import { CreateResponse, GetOneResponse, ListResponse, Subject } from "@/types";
+import { CreateResponse, GetOneResponse, ListResponse } from "@/types";
 import { BACKEND_BASE_URL } from "@/constants";
 
-type SubjectDepartment =
-  | string
-  | {
-      name?: string | null;
-    }
-  | null
-  | undefined;
+const getDisplayText = (
+  value: unknown,
+  keys: string[] = ["name", "code", "description", "id"]
+) => {
+  if (value == null) return "";
 
-type SubjectRecord = Omit<Subject, "department"> & {
-  department?: SubjectDepartment;
-  departmentName?: string | null;
-  department_name?: string | null;
-  departmentId?: string | number | null;
-  department_id?: string | number | null;
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return String(value);
+  }
+
+  if (typeof value === "object") {
+    const record = value as Record<string, unknown>;
+
+    for (const key of keys) {
+      const fieldValue = record[key];
+
+      if (
+        typeof fieldValue === "string" ||
+        typeof fieldValue === "number" ||
+        typeof fieldValue === "boolean"
+      ) {
+        return String(fieldValue);
+      }
+    }
+  }
+
+  return "";
 };
 
-const getDepartmentName = (subject: SubjectRecord) => {
-  if (typeof subject.department === "string") {
-    return subject.department;
-  }
+const normalizeSubject = (subject: unknown) => {
+  const record = subject as Record<string, unknown>;
 
-  if (subject.department && typeof subject.department === "object") {
-    return subject.department.name ?? "";
-  }
-
-  return (
-    subject.departmentName ??
-    subject.department_name ??
-    subject.departmentId?.toString() ??
-    subject.department_id?.toString() ??
-    ""
-  );
+  return {
+    ...record,
+    code:
+      getDisplayText(record.code, ["code", "name", "id"]) ||
+      getDisplayText(record.courseCode, ["courseCode", "code", "name", "id"]),
+    name: getDisplayText(record.name, ["name", "code", "id"]),
+    description: getDisplayText(record.description, [
+      "description",
+      "name",
+      "code",
+      "id",
+    ]),
+    department:
+      getDisplayText(record.department, ["name", "code", "description", "id"]) ||
+      getDisplayText(record.departmentName) ||
+      getDisplayText(record.department_name) ||
+      getDisplayText(record.departmentId) ||
+      getDisplayText(record.department_id),
+  };
 };
 
 const options: CreateDataProviderOptions = {
@@ -89,18 +112,11 @@ const options: CreateDataProviderOptions = {
       const payload: ListResponse = await response.json();
       const data = payload.data ?? [];
 
-      if (resource !== "subjects") {
-        return data;
+      if (resource === "subjects") {
+        return data.map(normalizeSubject);
       }
 
-      return data.map((subject) => {
-        const subjectRecord = subject as SubjectRecord;
-
-        return {
-          ...subjectRecord,
-          department: getDepartmentName(subjectRecord),
-        };
-      });
+      return data;
     },
 
     getTotalCount: async (response) => {
