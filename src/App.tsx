@@ -21,8 +21,6 @@ import SubjectsList from "@/pages/subjects/list.tsx"
 
 import ClassesList from "./pages/classes/list.tsx";
 import ClassesCreate from "./pages/classes/create.tsx"
-
-
 function App() {
    "@ts-expect-error"
     return (
