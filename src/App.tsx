@@ -1,4 +1,4 @@
-import { GitHubBanner, Refine } from "@refinedev/core";
+import { Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
@@ -13,14 +13,18 @@ import { useNotificationProvider } from "./components/refine-ui/notification/use
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
 import { dataProvider } from "./providers/data.ts";
 import Dashboard from "@/pages/dashboard.tsx";
-import { Home, BookOpen } from "lucide-react";
+import { Home, BookOpen, GraduationCap } from "lucide-react";
 import { Layout } from "@/components/refine-ui/layout/layout";
-import SubjectsCreate from "@/pages/subjects/create.tsx";
+import SubjectsCreate from "./pages/subjects/create.tsx";
 import SubjectsList from "@/pages/subjects/list.tsx"
 
+
+import ClassesList from "./pages/classes/list.tsx";
+import ClassesCreate from "./pages/classes/create.tsx"
+
+
 function App() {
-  // @ts-ignore
-    // @ts-ignore
+   "@ts-expect-error"
     return (
     <BrowserRouter>
       <RefineKbarProvider>
@@ -40,13 +44,23 @@ function App() {
                   {
                       name: 'dashboard',
                       list: '/',
-                      meta: {label: 'Home', icon: <Home/>}
+                      meta: {
+                        label: 'Home', 
+                        icon: <Home/>}
                   },
                   {
                       name: 'subjects',
                       list:'/subjects',
                       create: '/subjects/create',
-                      meta: {label: 'Subjects', icon: <BookOpen/> }
+                      meta: {
+                        label: 'Subjects', 
+                        icon: <BookOpen/> }
+                  },
+                  {
+                      name: 'classes',
+                      list:'/classes',
+                      create: '/classes/create',
+                      meta: {label: 'Classes', icon: <GraduationCap/> }
                   }
               ]}
 
@@ -63,6 +77,10 @@ function App() {
                           <Route index element={<SubjectsList/>}/>
                           <Route path="create" element={<SubjectsCreate/>}/>
                      </Route>
+                     <Route path="classes">
+                          <Route index element={<ClassesList />} />
+                          <Route path="create" element={<ClassesCreate />} />
+                    </Route>
                   </Route>
               </Routes>
               <Toaster />
